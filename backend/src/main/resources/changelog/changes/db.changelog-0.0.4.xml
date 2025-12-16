@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="0.0.4-update-move-schema" author="ranim">
+        <addColumn tableName="move">
+            <column name="from_row" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="from_col" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_row" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_col" type="INT" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <dropColumn tableName="move" columnName="from_pos"/>
+        <dropColumn tableName="move" columnName="to_pos"/>
+        <renameColumn tableName="move" oldColumnName="piece" newColumnName="piece_type" columnDataType="VARCHAR(10)"/>
+    </changeSet>
+
+</databaseChangeLog>

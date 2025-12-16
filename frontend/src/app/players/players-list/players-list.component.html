@@ -1,0 +1,19 @@
+<div class="glass-card">
+  <h2>Welcome, {{ username }}</h2>
+  <h3>Online Players</h3>
+
+  <div class="players-grid">
+    <div *ngFor="let player of players" class="glass-card player-card">
+      <div class="avatar-placeholder">{{ player.username.substring(0, 1).toUpperCase() }}</div>
+      <div>
+        <span class="status-indicator"></span>
+        {{ player.username }}
+      </div>
+      <button class="invite-btn" (click)="invite(player.id)">Invite</button>
+    </div>
+
+    <div *ngIf="players.length === 0" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">
+      No other players online.
+    </div>
+  </div>
+</div>

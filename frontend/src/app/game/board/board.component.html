@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-center mt-5">
+    <div class="chessboard">
+        <div *ngFor="let row of board; let r = index" class="row">
+            <div *ngFor="let piece of row; let c = index" class="cell"
+                [ngClass]="{'white': (r + c) % 2 === 0, 'black': (r + c) % 2 !== 0, 'selected': selectedCell?.row === r && selectedCell?.col === c}"
+                (click)="onCellClick(r, c)">
+                {{ getPieceSymbol(piece) }}
+            </div>
+        </div>
+    </div>
+</div>
