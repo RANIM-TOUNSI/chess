@@ -44,10 +44,17 @@ export class WebSocketService {
     }
 
     subscribe(topic: string, callback: (message: Message) => void) {
+        console.log(`[WebSocketService] Requesting subscription to: ${topic}`);
         // Wait until connected to subscribe
         const sub = this.connected$.subscribe(connected => {
             if (connected) {
-                this.client.subscribe(topic, callback);
+                console.log(`[WebSocketService] Client connected. Subscribing to: ${topic}`);
+                this.client.subscribe(topic, (message) => {
+                    console.log(`[WebSocketService] Message received on ${topic}:`, message.body);
+                    callback(message);
+                });
+            } else {
+                console.log(`[WebSocketService] Client not connected yet. Waiting for connection...`);
             }
         });
     }

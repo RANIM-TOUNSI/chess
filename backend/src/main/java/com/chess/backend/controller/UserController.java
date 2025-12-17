@@ -34,4 +34,9 @@ public class UserController {
     public java.util.List<User> getOnlineUsers() {
         return userService.getOnlineUsers();
     }
+
+    @PostMapping("/logout")
+    public void logout(@RequestBody User user) {
+        userService.logout(user.getUsername());
+    }
 }

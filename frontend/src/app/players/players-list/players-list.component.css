@@ -21,48 +21,67 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: 1.2rem;
+    padding: 1.8rem;
     text-align: center;
-    transition: transform 0.2s;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
 }
 
 .player-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .avatar-placeholder {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #e94560, #16213e);
+    background: linear-gradient(135deg, #6366f1, #a855f7);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 26px;
+    font-weight: 700;
     color: white;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .status-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: #0f0;
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
     border-radius: 50%;
-    box-shadow: 0 0 10px #0f0;
+    box-shadow: 0 0 12px #22c55e;
     display: inline-block;
     margin-right: 8px;
 }
 
 .invite-btn {
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1.5rem;
     width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .invite-btn:hover {
-    filter: brightness(1.2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.invite-btn:active {
+    transform: translateY(0);
 }

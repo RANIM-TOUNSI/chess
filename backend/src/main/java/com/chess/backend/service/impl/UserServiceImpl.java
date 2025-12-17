@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
     public LoginResponse login(String username, String password) {
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+                new UsernamePasswordAuthenticationToken(username, password));
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -49,5 +48,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public java.util.List<User> getOnlineUsers() {
         return userRepository.findByOnlineTrue();
+    }
+
+    @Override
+    public void logout(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setOnline(false);
+        userRepository.save(user);
     }
 }
