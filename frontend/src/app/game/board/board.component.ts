@@ -4,13 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { WebSocketService } from '../../services/websocket.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-board',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './board.component.html',
-  styleUrl: './board.component.css'
+  styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
   gameId: number | null = null;
@@ -42,9 +43,7 @@ export class BoardComponent implements OnInit {
   }
 
   loadMoves() {
-    const token = this.authService.getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.get<any[]>(`http://localhost:8081/games/${this.gameId}/moves`, { headers }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/games/${this.gameId}/moves`).subscribe({
       next: (moves) => {
         moves.forEach(m => this.updateBoard(m.fromRow, m.fromCol, m.toRow, m.toCol));
       },
@@ -90,8 +89,6 @@ export class BoardComponent implements OnInit {
     // this.updateBoard(fromRow, fromCol, toRow, toCol);
 
     // Send to server
-    const token = this.authService.getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
     const move = {
       game: { id: this.gameId },
       player: { id: this.currentUserId },
@@ -102,7 +99,7 @@ export class BoardComponent implements OnInit {
       pieceType: this.board[fromRow][fromCol]
     };
 
-    this.http.post('http://localhost:8081/games/move', move, { headers }).subscribe({
+    this.http.post(`${environment.apiUrl}/games/move`, move).subscribe({
       next: () => {
         // Success, wait for socket to confirm or simple verify
       },

@@ -19,8 +19,10 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   login() {
+    console.log('Login clicked');
     this.errorMessage = null;
     this.isLoading = true;
+
 
     this.authService.login(this.username, this.password).subscribe({
       next: (res) => {
@@ -31,6 +33,7 @@ export class LoginComponent {
         this.isLoading = false;
         console.error(err);
         this.errorMessage = 'Login failed. Please check your credentials or backend connection.';
+        alert('Login Error: ' + (err.error?.message || err.message || 'Unknown error'));
       }
     });
   }

@@ -3,6 +3,7 @@ import { Client, Message } from '@stomp/stompjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import SockJS from 'sockjs-client';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -13,8 +14,7 @@ export class WebSocketService {
 
     constructor(private authService: AuthService) {
         this.client = new Client({
-            // We use SockJS fallback because standard ws:// might get blocked or have issues
-            webSocketFactory: () => new SockJS('http://localhost:8081/ws'),
+            webSocketFactory: () => new SockJS(`${environment.apiUrl}/ws`),
             debug: (str) => {
                 console.log(str);
             },
@@ -35,9 +35,6 @@ export class WebSocketService {
     }
 
     connect() {
-        // You might want to pass headers like Authorization if needed, 
-        // but often cookies or query params are used with SockJS. 
-        // For now we assume connection is allowed.
         this.client.activate();
     }
 

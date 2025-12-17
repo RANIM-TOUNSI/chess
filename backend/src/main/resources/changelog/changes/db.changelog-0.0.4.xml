@@ -24,5 +24,18 @@
         <dropColumn tableName="move" columnName="to_pos"/>
         <renameColumn tableName="move" oldColumnName="piece" newColumnName="piece_type" columnDataType="VARCHAR(10)"/>
     </changeSet>
+    <changeSet id="remove-online-column" author="ranim">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="online"/>
+        </preConditions>
+        <dropColumn tableName="users" columnName="online"/>
+    </changeSet>
 
+    <changeSet id="add-online-column-boolean" author="ranim">
+        <addColumn tableName="users">
+            <column name="online" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
 import { WebSocketService } from '../../services/websocket.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-players-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './players-list.component.html',
-  styleUrl: './players-list.component.css'
+  styleUrls: ['./players-list.component.css']
 })
 export class PlayersListComponent implements OnInit {
   players: any[] = [];
@@ -48,41 +49,40 @@ export class PlayersListComponent implements OnInit {
   }
 
   fetchOnlinePlayers() {
-    // We add authorization header manually or via interceptor (assuming interceptor or simple test)
-    // For this prototype we will assume token is handled by interceptor if added later, 
-    // or we add a simple headers object here if AuthInterceptor is not yet present.
-    // Let's check if we added an interceptor. I recall we didn't add one in the prompt.
-    // So I should add headers here.
-    const token = this.authService.getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
-
-    this.http.get<any[]>('http://localhost:8081/user/online', { headers }).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/user/online`).subscribe({
       next: (data) => {
         this.players = data.filter(p => p.id !== this.currentUserId);
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error('Failed to fetch online players:', err)
     });
   }
 
   invite(playerId: number) {
-    const token = this.authService.getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
-    // Send invitation request
-    // We need a backend endpoint for this or just send via socket. 
-    // The requirement says "Invite player", previously I saw GameController has /invite
-    this.http.post(`http://localhost:8081/games/invite?from=${this.currentUserId}&to=${playerId}`, {}, { headers })
-      .subscribe(() => alert('Invitation sent!'));
+    console.log('Invite clicked for player:', playerId);
+    this.http.post(`${environment.apiUrl}/games/invite?from=${this.currentUserId}&to=${playerId}`, {})
+      .subscribe({
+        next: () => alert('Invitation sent!'),
+        error: (err) => console.error('Failed to send invitation:', err)
+      });
+  }
+
+  logout() {
+    console.log('Logging out...');
+    this.authService.logout();
   }
 
   acceptInvitation(opponentId: number, myId: number) {
-    const token = this.authService.getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
-    this.http.post<any>(`http://localhost:8081/games/create?player1Id=${opponentId}&player2Id=${myId}`, {}, { headers })
-      .subscribe(game => {
-        this.router.navigate(['/game', game.id]);
-        // Also need to notify opponent to navigate. 
-        // Ideally creation handles this broadcast or we assume socket does. 
-        // For now let's stick to basics.
+    this.http.post<any>(`${environment.apiUrl}/games/create?player1Id=${opponentId}&player2Id=${myId}`, {})
+      .subscribe({
+        next: (game) => {
+          this.router.navigate(['/game', game.id]);
+        },
+        error: (err) => console.error('Failed to create game:', err)
       });
+  }
+
+  goToLogin() {
+    console.log('Go to Login button clicked');
+    this.router.navigate(['/login']);
   }
 }
