@@ -13,7 +13,7 @@ import java.util.Map;
 public class JwtUtil {
 
     // 256-bit key (32 chars)
-    private final String SECRET_KEY = "mysecretkey123456789012345678901234567890";
+    private final String SECRET_KEY = "mysecretkey123456789012345678901234567890serserllohhfeheoebhjvioifrjbhfheudshvhsrhhihvkshjoivjbjojbheibhjviofhjv";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

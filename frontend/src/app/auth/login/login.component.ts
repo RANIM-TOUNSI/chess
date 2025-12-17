@@ -17,6 +17,10 @@ export class LoginComponent {
   isLoading = false;
 
   constructor(private authService: AuthService, private router: Router) { }
+testClick() {
+  console.log('✅ TEST CLICK FIRED');
+  alert('TEST CLICK WORKS');
+}
 
   login() {
     console.log('Login clicked');
@@ -40,21 +44,17 @@ export class LoginComponent {
 
   demoLogin() {
     alert('Starting Demo Mode...');
-    console.log('Demo Login Clicked!');
-    this.isLoading = true;
-
-    console.log('Setting tokens...');
-    if (typeof localStorage !== 'undefined') {
-      const guestId = Math.floor(Math.random() * 10000) + 1000;
-      localStorage.setItem('token', 'demo-token');
-      localStorage.setItem('userId', guestId.toString());
-      localStorage.setItem('username', `Guest-${guestId}`);
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const guestId = Math.floor(Math.random() * 10000) + 1000;
+        localStorage.setItem('token', 'demo-token');
+        localStorage.setItem('userId', guestId.toString());
+        localStorage.setItem('username', `Guest-${guestId}`);
+      }
+      // Force navigation bypassing Angular Router
+      window.location.href = '/players';
+    } catch (e: any) {
+      alert('Demo Login Error: ' + e.message);
     }
-
-    this.isLoading = false;
-    console.log('Navigating...');
-    this.router.navigate(['/players'])
-      .then(success => console.log('Navigation result:', success))
-      .catch(err => console.error('Navigation error:', err));
   }
 }
