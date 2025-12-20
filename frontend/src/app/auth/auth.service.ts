@@ -21,7 +21,18 @@ export class AuthService {
   private loggingOut = new BehaviorSubject<boolean>(false);
   public loggingOut$ = this.loggingOut.asObservable();
 
+  // Reactive Login State
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
   constructor(private http: HttpClient, private injector: Injector, private router: Router) { }
+
+  private hasToken(): boolean {
+    if (typeof localStorage !== 'undefined') {
+      return !!localStorage.getItem('token');
+    }
+    return false;
+  }
 
   register(username: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, { username, password });
@@ -34,6 +45,7 @@ export class AuthService {
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.id.toString());
           localStorage.setItem('username', res.username);
+          this.isLoggedInSubject.next(true);
         }
       })
     );
@@ -67,6 +79,7 @@ export class AuthService {
         console.warn('Could not disconnect WebSocket:', e);
       }
 
+      this.isLoggedInSubject.next(false);
       this.loggingOut.next(false);
       this.router.navigate(['/login']);
     };
@@ -106,9 +119,12 @@ export class AuthService {
 
   getToken(): string | null {
     if (typeof localStorage !== 'undefined') {
-      const token = localStorage.getItem('token');
-      return token ? token : 'guest-token';
+      return localStorage.getItem('token');
     }
-    return 'guest-token';
+    return null;
+  }
+
+  isLoggedIn(): boolean {
+    return this.isLoggedInSubject.value;
   }
 }

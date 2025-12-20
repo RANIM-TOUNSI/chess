@@ -19,6 +19,7 @@ export class PlayersListComponent implements OnInit {
   currentUserId: number | null = null;
   username: string | null = null;
   loggingOut$ = this.authService.loggingOut$;
+  isLoggedIn$ = this.authService.isLoggedIn$;
 
   constructor(
     private http: HttpClient,
@@ -31,7 +32,14 @@ export class PlayersListComponent implements OnInit {
   ngOnInit() {
     this.currentUserId = this.authService.getUserId();
     this.username = this.authService.getUsername();
-    this.fetchOnlinePlayers();
+    this.fetchOnlinePlayers(); // Initial fetch (optional if WebSocket sends immediate list on connect)
+
+    // Subscribe to real-time player updates
+    this.webSocketService.subscribe('/topic/players', (message) => {
+      console.log('Players list update received:', message.body);
+      const onlineUsers: any[] = JSON.parse(message.body);
+      this.players = onlineUsers.filter(p => p.id !== this.currentUserId);
+    });
 
     // Re-initialize invitation service in case of page refresh/login mismatch
     this.invitationService.initialize();

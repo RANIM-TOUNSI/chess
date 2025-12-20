@@ -4,10 +4,14 @@
 
     <div style="display: flex; gap: 0.5rem; align-items: center;">
       <span *ngIf="loggingOut$ | async" style="color: white; font-size: 0.9rem;">Logging out...</span>
-      <button (click)="logout()" [disabled]="loggingOut$ | async"
+      <button *ngIf="isLoggedIn$ | async" (click)="logout()" [disabled]="loggingOut$ | async"
         style="background: #4299e1; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
         <ng-container *ngIf="!(loggingOut$ | async)">Logout</ng-container>
         <ng-container *ngIf="loggingOut$ | async">...</ng-container>
+      </button>
+      <button *ngIf="!(isLoggedIn$ | async)" (click)="goToLogin()"
+        style="background: #48bb78; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">
+        Login
       </button>
     </div>
   </div>

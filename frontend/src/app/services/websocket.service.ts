@@ -35,6 +35,12 @@ export class WebSocketService {
     }
 
     connect() {
+        const token = this.authService.getToken();
+        if (token) {
+            this.client.connectHeaders = {
+                Authorization: `Bearer ${token}`
+            };
+        }
         this.client.activate();
     }
 
